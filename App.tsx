@@ -65,7 +65,6 @@ const App = () => {
           ref={(ref) => {
             // Player ref
           }}
-          audioOnly={true}
           playInBackground={true}
           playWhenInactive={true}
           ignoreSilentSwitch="ignore"
