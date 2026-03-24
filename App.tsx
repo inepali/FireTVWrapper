@@ -41,7 +41,7 @@ const App = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <WebView
-        source={{ uri: 'https://darkred-lobster-112707.hostingersite.com/' }}
+        source={{ uri: 'https://coral-opossum-288639.hostingersite.com/' }}
         style={styles.webview}
         allowsFullscreenVideo={true}
         javaScriptEnabled={true}
@@ -54,7 +54,9 @@ const App = () => {
         }}
         onHttpError={(syntheticEvent) => {
           const { nativeEvent } = syntheticEvent;
-          console.warn('WebView HTTP error: ', nativeEvent);
+          console.warn(
+            `WebView HTTP error: ${nativeEvent.statusCode} on URL: ${nativeEvent.url}`
+          );
         }}
       />
 
