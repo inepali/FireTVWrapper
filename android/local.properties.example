@@ -1,0 +1,8 @@
+# Location of the Android SDK
+sdk.dir=/path/to/Android/sdk
+
+# Release Keystore Configuration (keep private)
+FIRETV_RELEASE_STORE_FILE=release.keystore
+FIRETV_RELEASE_KEY_ALIAS=firetv-key-alias
+FIRETV_RELEASE_STORE_PASSWORD=your_keystore_password
+FIRETV_RELEASE_KEY_PASSWORD=your_key_password

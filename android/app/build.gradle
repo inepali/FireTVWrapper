@@ -72,6 +72,27 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def getReleaseProperty = { String key, String envVar = key ->
+    if (project.hasProperty(key)) {
+        return project.property(key)
+    }
+    if (localProperties.containsKey(key)) {
+        return localProperties.getProperty(key)
+    }
+    if (System.getenv(envVar) != null) {
+        return System.getenv(envVar)
+    }
+    return null
+}
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -92,15 +113,23 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            def storeFilePath = getReleaseProperty('FIRETV_RELEASE_STORE_FILE') ?: getReleaseProperty('MYAPP_UPLOAD_STORE_FILE') ?: 'release.keystore'
+            def storeFileObj = file(storeFilePath)
+            if (storeFileObj.exists()) {
+                storeFile storeFileObj
+                storePassword getReleaseProperty('FIRETV_RELEASE_STORE_PASSWORD') ?: getReleaseProperty('MYAPP_UPLOAD_STORE_PASSWORD')
+                keyAlias getReleaseProperty('FIRETV_RELEASE_KEY_ALIAS') ?: getReleaseProperty('MYAPP_UPLOAD_KEY_ALIAS')
+                keyPassword getReleaseProperty('FIRETV_RELEASE_KEY_PASSWORD') ?: getReleaseProperty('MYAPP_UPLOAD_KEY_PASSWORD')
+            }
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig (signingConfigs.release.storeFile?.exists() ? signingConfigs.release : signingConfigs.debug)
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
