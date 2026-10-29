@@ -25,6 +25,13 @@ const App = () => {
     true;
   `;
 
+  // Pre-set Hostinger's consent cookie (analytics/marketing denied) so the
+  // site's cookie banner never appears on the TV
+  const injectedJavaScriptBeforeContentLoaded = `
+    document.cookie = 'hconsent=1%3Adenied; Max-Age=31536000; Path=/; SameSite=Lax';
+    true;
+  `;
+
   const onMessage = (event: any) => {
     try {
       const data = JSON.parse(event.nativeEvent.data);
@@ -46,6 +53,9 @@ const App = () => {
         allowsFullscreenVideo={true}
         javaScriptEnabled={true}
         domStorageEnabled={true}
+        injectedJavaScriptBeforeContentLoaded={
+          injectedJavaScriptBeforeContentLoaded
+        }
         injectedJavaScript={injectedJavaScript}
         onMessage={onMessage}
         onError={syntheticEvent => {
