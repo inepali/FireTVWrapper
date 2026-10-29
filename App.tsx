@@ -41,21 +41,21 @@ const App = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <WebView
-        source={{ uri: 'https://coral-opossum-288639.hostingersite.com/' }}
+        source={{ uri: 'https://menudisplay.carelocal.net/cast' }}
         style={styles.webview}
         allowsFullscreenVideo={true}
         javaScriptEnabled={true}
         domStorageEnabled={true}
         injectedJavaScript={injectedJavaScript}
         onMessage={onMessage}
-        onError={(syntheticEvent) => {
+        onError={syntheticEvent => {
           const { nativeEvent } = syntheticEvent;
           console.warn('WebView error: ', nativeEvent);
         }}
-        onHttpError={(syntheticEvent) => {
+        onHttpError={syntheticEvent => {
           const { nativeEvent } = syntheticEvent;
           console.warn(
-            `WebView HTTP error: ${nativeEvent.statusCode} on URL: ${nativeEvent.url}`
+            `WebView HTTP error: ${nativeEvent.statusCode} on URL: ${nativeEvent.url}`,
           );
         }}
       />
@@ -64,7 +64,7 @@ const App = () => {
       {audioUrl && (
         <Video
           source={{ uri: audioUrl }}
-          ref={(ref) => {
+          ref={ref => {
             // Player ref
           }}
           playInBackground={true}
@@ -72,7 +72,7 @@ const App = () => {
           ignoreSilentSwitch="ignore"
           repeat={true}
           style={styles.backupPlayer} // Hidden player
-          onError={(e) => console.log('Video Error:', e)}
+          onError={e => console.log('Video Error:', e)}
         />
       )}
     </SafeAreaView>

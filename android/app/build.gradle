@@ -129,7 +129,7 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            signingConfig (signingConfigs.release.storeFile?.exists() ? signingConfigs.release : signingConfigs.debug)
+            signingConfig (signingConfigs.release.storeFile != null ? signingConfigs.release : signingConfigs.debug)
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
